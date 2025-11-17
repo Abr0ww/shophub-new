@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop - Online Store</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+      </div>
+      <h1 class="loading-title">ShopHub</h1>
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand logo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      <span>ShopHub</span>
+    </div>
+    <nav>
+      <span class="points-chip" id="points-chip">0 pts</span>
+    </nav>
+  </header>
+  <div class="container">
+    <section id="tab-menu" class="tab active">
+      <h2 class="offers-heading" onclick="setActiveTab('deals')" style="cursor: pointer;">Special Offers</h2>
+      <div id="offers" class="grid"></div>
+
+      <h2>Shop All Products</h2>
+      <div id="menu-by-category"></div>
+    </section>
+
+    <section id="tab-order" class="tab">
+      <h2>Your Cart</h2>
+      <div id="cart" class="cart"></div>
+      <div class="points-card" id="points-card">
+        <div class="points-card-header">
+          <span>Use Points</span>
+          <span id="points-available">0 pts</span>
+        </div>
+        <input type="range" id="points-slider" min="0" max="0" value="0" />
+        <div class="points-card-info">
+          <span id="points-redeem-display">Redeem 0 pts</span>
+          <span id="points-discount-display">-$0.00</span>
+        </div>
+        <button type="button" id="points-max-btn">Use Max</button>
+      </div>
+      <div id="payment-section" style="display: none;">
+        <div class="test-card-info">
+          <strong>🧪 Test Mode</strong> - Use test card: <code>4242 4242 4242 4242</code>
+          <br>Expiry: Any future date | CVC: Any 3 digits
+        </div>
+        <div id="payment-element"></div>
+        <div class="payment-buttons">
+          <div id="google-pay-container"></div>
+          <div id="apple-pay-container"></div>
+          <div id="paypal-container"></div>
+        </div>
+        <button id="pay-btn" class="pay-button">Pay Now</button>
+        <button id="cancel-payment" class="cancel-button">Cancel</button>
+      </div>
+      <button id="order-btn">Proceed to Payment</button>
+
+      <!-- Order Success Section (Hidden by default) -->
+      <div id="order-success-section" style="display: none;">
+        <div class="order-success-card">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <h2>Order Placed Successfully! 🎉</h2>
+          <p class="success-message" id="order-success-message">Your order has been confirmed.</p>
+          
+          <!-- Shipping Method Selection -->
+          <div class="delivery-platforms">
+            <h3>Choose Your Shipping Method</h3>
+            <p class="delivery-notice">Select how you'd like to receive your order</p>
+            
+            <div class="delivery-options">
+              <button class="delivery-option-btn" data-platform="pickup" onclick="selectDeliveryPlatform('pickup')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+                <span>Store Pickup</span>
+                <small>Free • Ready today</small>
+              </button>
+              
+              <button class="delivery-option-btn" data-platform="standard" onclick="selectDeliveryPlatform('standard')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                </svg>
+                <span>Standard Shipping</span>
+                <small>$5.99 • 5-7 days</small>
+              </button>
+              
+              <button class="delivery-option-btn" data-platform="express" onclick="selectDeliveryPlatform('express')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M13 3L3 14h8l-1 8 10-11h-8l1-8z"/>
+                </svg>
+                <span>Express Shipping</span>
+                <small>$14.99 • 2-3 days</small>
+              </button>
+              
+              <button class="delivery-option-btn" data-platform="overnight" onclick="selectDeliveryPlatform('overnight')">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+                <span>Overnight</span>
+                <small>$24.99 • Next day</small>
+              </button>
+            </div>
+            
+            <p class="delivery-selection-note" id="delivery-selection-note" style="display: none;">
+              <strong id="selected-platform-name"></strong> selected! 
+              <span id="platform-action-text"></span>
+            </p>
+          </div>
+
+          <button class="continue-shopping-btn" onclick="continueShoppingAfterOrder()">Continue Shopping</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-deals" class="tab">
+      <h2>Points Rewards</h2>
+      <p class="deals-subtitle">Redeem your points for exclusive deals and discounts!</p>
+      <div id="deals-grid" class="deals-grid"></div>
+      
+      <h2 style="margin-top: 32px;">My Redeemed Deals</h2>
+      <div id="my-deals" class="my-deals-list"></div>
+    </section>
+
+    <section id="tab-profile" class="tab">
+      <div class="card">
+        <h3 id="user-name"></h3>
+        <p>Email: <span id="user-email"></span></p>
+        <p>Role: <span id="user-role"></span></p>
+        <p>Points: <span id="user-points"></span></p>
+        <button id="logout-btn">Logout</button>
+      </div>
+
+      <h2>
+        <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
+          <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM19 12h2c0-4.97-4.03-9-9-9v2c3.87 0 7 3.13 7 7zm-4 0h2c0-2.76-2.24-5-5-5v2c1.66 0 3 1.34 3 3z"/>
+        </svg>
+        Help & Support
+      </h2>
+      <div class="card">
+        <button id="helpline-btn" class="helpline-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+            <path d="M11 12h2v2h-2zm0-6h2v4h-2z"/>
+          </svg>
+          Send Feedback / Report Issue
+        </button>
+      </div>
+
+      <h2>Order History</h2>
+      <div id="orders"></div>
+    </section>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="modal-close" id="close-feedback-modal">&times;</span>
+        <h2>
+          <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
+            <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM19 12h2c0-4.97-4.03-9-9-9v2c3.87 0 7 3.13 7 7zm-4 0h2c0-2.76-2.24-5-5-5v2c1.66 0 3 1.34 3 3z"/>
+          </svg>
+          Help & Support
+        </h2>
+        <form id="feedback-form">
+          <label for="feedback-type" class="form-label">Type of Feedback</label>
+          <select id="feedback-type" required>
+            <option value="feedback">General Feedback</option>
+            <option value="complaint">Complaint</option>
+            <option value="suggestion">Suggestion</option>
+            <option value="bug">Report Bug</option>
+          </select>
+          <label for="feedback-subject" class="form-label">Subject</label>
+          <input type="text" id="feedback-subject" placeholder="Brief description" required maxlength="100" />
+          <label for="feedback-message" class="form-label">Message</label>
+          <textarea id="feedback-message" placeholder="Tell us more..." required rows="6"></textarea>
+          <button type="submit" class="submit-feedback-btn">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-detail-modal" class="modal" style="display: none;">
+      <div class="product-detail-content">
+        <span class="modal-close" id="close-product-detail">&times;</span>
+        <div class="product-detail-grid">
+          <div class="product-detail-images">
+            <div class="main-image-container">
+              <img id="product-main-image" src="" alt="Product Image" />
+              <div id="product-zoom-indicator" class="zoom-indicator">🔍 Hover to zoom</div>
+            </div>
+            <div class="product-thumbnail-gallery" id="product-thumbnails"></div>
+          </div>
+          <div class="product-detail-info">
+            <h2 id="product-detail-name"></h2>
+            <div class="product-detail-rating">
+              <span class="stars" id="product-detail-stars"></span>
+              <span id="product-detail-rating-value"></span>
+              <span id="product-detail-review-count"></span>
+            </div>
+            <div class="product-detail-price">
+              <span id="product-detail-original-price" class="original-price"></span>
+              <span id="product-detail-price" class="current-price"></span>
+              <span id="product-detail-discount" class="discount-badge-inline"></span>
+            </div>
+            <div class="product-detail-stock" id="product-detail-stock"></div>
+            <div class="product-detail-description" id="product-detail-description"></div>
+            
+            <!-- Product Specifications -->
+            <div class="product-specs" id="product-specs"></div>
+            
+            <div class="product-detail-actions">
+              <button id="add-to-cart-detail" class="add-to-cart-detail-btn">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Platform Browser Modal (Fallback - now using popup windows) -->
+    <div id="delivery-browser-modal" class="modal delivery-browser-modal" style="display: none;">
+      <div class="delivery-browser-content">
+        <div class="delivery-browser-header">
+          <button class="delivery-browser-back" id="delivery-browser-back">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+          </button>
+          <span class="delivery-browser-title" id="delivery-browser-title">Loading...</span>
+          <button class="delivery-browser-close" id="delivery-browser-close">×</button>
+        </div>
+        <div class="delivery-browser-body">
+          <iframe id="delivery-browser-frame" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn" data-tab="menu" aria-label="Shop">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H2v13c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6h-6zm-6-2h4v2h-4V4zM9 18V9l7.5 4.5L9 18z"/></svg>
+      <span>Shop</span>
+    </button>
+    <button class="nav-btn" data-tab="order" aria-label="Cart">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      <span>Cart</span>
+    </button>
+    <button class="nav-btn" data-tab="deals" aria-label="Offers">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+      <span>Offers</span>
+    </button>
+    <button class="nav-btn" data-tab="profile" aria-label="Account">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-5 0-9 3-9 6v2h18v-2c0-3-4-6-9-6z"/></svg>
+      <span>Account</span>
+    </button>
+  </nav>
+  <script src="/js/customer.js"></script>
+</body>
+<html>
+
+

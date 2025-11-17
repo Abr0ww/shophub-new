@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin - Store Management</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+      </div>
+      <h1 class="loading-title">ShopHub</h1>
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+        <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+      </svg>
+      <span>ShopHub Admin</span>
+    </div>
+    <nav>
+      <a href="#" id="logout-link">Logout</a>
+    </nav>
+  </header>
+  
+  <div class="admin-container">
+    <!-- Products Tab -->
+    <div id="tab-products" class="admin-tab active">
+      <h2>Manage Categories</h2>
+      <div class="card">
+        <h3>Create New Category</h3>
+        <input id="c-name" placeholder="Category name (e.g., Burgers)" />
+        <input id="c-icon" placeholder="Icon emoji (e.g., 🍔)" />
+        <textarea id="c-desc" placeholder="Category description"></textarea>
+        <input id="c-order" type="number" placeholder="Display order (1, 2, 3...)" />
+        <button id="create-category">Create Category</button>
+      </div>
+
+      <h2>📦 All Products</h2>
+      <div class="card">
+        <div id="admin-products-list" class="admin-products-list"></div>
+      </div>
+
+      <h2>Create Product</h2>
+      <div class="card">
+        <h3>Basic Information</h3>
+        <input id="p-name" placeholder="Product name" />
+        <label class="file-upload-label">
+          <span>📸 Upload Product Image</span>
+          <input type="file" id="p-image" accept="image/*" style="display: none;" />
+          <div id="p-image-preview" class="image-preview"></div>
+        </label>
+        <input id="p-price" type="number" step="0.01" placeholder="Price ($)" />
+        <select id="p-category">
+          <option value="">Select Category</option>
+        </select>
+        <input id="p-offer" type="number" step="1" placeholder="Discount % (optional)" />
+        <textarea id="p-desc" placeholder="Product description" rows="3"></textarea>
+        
+        <h3 style="margin-top: 20px;">Inventory</h3>
+        <input id="p-stock" type="number" placeholder="Stock quantity" value="0" />
+        <input id="p-sku" placeholder="SKU (Stock Keeping Unit)" />
+        <input id="p-brand" placeholder="Brand (optional)" />
+        
+        <h3 style="margin-top: 20px;">Product Details</h3>
+        <input id="p-weight" placeholder="Weight (e.g., 500g, 1.2kg)" />
+        <input id="p-dimensions" placeholder="Dimensions (e.g., 30x20x15cm)" />
+        <input id="p-tags" placeholder="Tags (comma separated, e.g., new, bestseller)" />
+        
+        <label style="display: flex; align-items: center; margin-top: 10px;">
+          <input type="checkbox" id="p-available" checked style="margin-right: 8px;" />
+          <span>Available for purchase</span>
+        </label>
+        
+        <button id="create-product" style="margin-top: 20px;">Create Product</button>
+      </div>
+    </div>
+
+    <!-- Offers Tab -->
+    <div id="tab-offers" class="admin-tab">
+      <h2>Offer Banner</h2>
+      <div class="card">
+        <label class="file-upload-label">
+          <span>📸 Upload Offer Image</span>
+          <input type="file" id="o-image" accept="image/*" style="display: none;" />
+          <div id="o-image-preview" class="image-preview"></div>
+        </label>
+        <input id="o-headline" placeholder="Headline (e.g., -20% OFF)" />
+        <input id="o-subtext" placeholder="Subtext (e.g., Classic Burger)" />
+        <button id="save-offer">Save Offer</button>
+      </div>
+
+      <h2>Manage Points Deals</h2>
+      <div class="card">
+        <h3>Create New Deal</h3>
+        <input id="d-title" placeholder="Deal title (e.g., 🎉 10% Off Next Order)" />
+        <textarea id="d-description" placeholder="Deal description"></textarea>
+        <label class="file-upload-label">
+          <span>📸 Upload Deal Image</span>
+          <input type="file" id="d-image" accept="image/*" style="display: none;" />
+          <div id="d-image-preview" class="image-preview"></div>
+        </label>
+        <input id="d-points" type="number" placeholder="Points cost" />
+        <select id="d-type">
+          <option value="percentage">Percentage Discount (%)</option>
+          <option value="fixed">Fixed Discount ($)</option>
+          <option value="freeItem">Free Item</option>
+        </select>
+        <input id="d-value" type="number" step="0.01" placeholder="Discount value (10 for 10% or $10)" />
+        <input id="d-min-order" type="number" step="0.01" placeholder="Minimum order value (optional)" />
+        <input id="d-max-uses" type="number" placeholder="Max uses per customer (default: 1)" />
+        <input id="d-expiry" type="date" placeholder="Expiry date (optional)" />
+        <button id="create-deal">Create Deal</button>
+      </div>
+
+      <h2>Existing Deals</h2>
+      <div id="deals-list" class="deals-admin-list"></div>
+    </div>
+
+    <!-- Feedback Tab -->
+    <div id="tab-feedback" class="admin-tab">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
+          <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM19 12h2c0-4.97-4.03-9-9-9v2c3.87 0 7 3.13 7 7zm-4 0h2c0-2.76-2.24-5-5-5v2c1.66 0 3 1.34 3 3z"/>
+        </svg>
+        Customer Feedback & Reports
+      </h2>
+      <div class="card">
+        <div class="feedback-filters">
+          <button class="filter-btn active" data-status="all">All</button>
+          <button class="filter-btn" data-status="pending">Pending</button>
+          <button class="filter-btn" data-status="reviewed">Reviewed</button>
+          <button class="filter-btn" data-status="resolved">Resolved</button>
+        </div>
+      </div>
+      <div id="feedback-list" class="feedback-list"></div>
+    </div>
+
+    <!-- Stats Tab -->
+    <div id="tab-stats" class="admin-tab">
+      <h2>Restaurant Settings & Opening Hours</h2>
+      <div class="card">
+        <h3>Basic Information</h3>
+        <input id="s-name" placeholder="Restaurant name" />
+        <input id="s-tagline" placeholder="Tagline" />
+        <textarea id="s-description" placeholder="Description"></textarea>
+        <input id="s-phone" placeholder="Phone" />
+        <input id="s-email" placeholder="Email" />
+        <textarea id="s-address" placeholder="Address"></textarea>
+        <button id="save-basic-settings">Save Basic Info</button>
+      </div>
+
+      <h2>Opening Hours</h2>
+      <div id="opening-hours-list"></div>
+
+      <h2>Daily Sales (7d)</h2>
+      <pre id="daily-sales"></pre>
+
+      <h2>Weekly Sales (8w)</h2>
+      <pre id="weekly-sales"></pre>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav admin-bottom-nav">
+    <button class="nav-item active" data-tab="products">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Products</span>
+    </button>
+    <button class="nav-item" data-tab="offers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 6v6l4 2"></path>
+      </svg>
+      <span>Offers</span>
+    </button>
+    <button class="nav-item" data-tab="feedback">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span>Feedback</span>
+    </button>
+    <button class="nav-item" data-tab="stats">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="20" x2="12" y2="10"></line>
+        <line x1="18" y1="20" x2="18" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="16"></line>
+      </svg>
+      <span>Stats</span>
+    </button>
+  </nav>
+
+  <!-- Edit Product Modal -->
+  <div id="edit-product-modal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 600px;">
+      <span class="close-modal" onclick="closeEditProductModal()">&times;</span>
+      <h2>Edit Product</h2>
+      <input id="edit-p-id" type="hidden" />
+      <input id="edit-p-name" placeholder="Product name" />
+      <input id="edit-p-price" type="number" step="0.01" placeholder="Price ($)" />
+      <textarea id="edit-p-desc" placeholder="Description" rows="3"></textarea>
+      <input id="edit-p-stock" type="number" placeholder="Stock quantity" />
+      <input id="edit-p-sku" placeholder="SKU" />
+      <input id="edit-p-brand" placeholder="Brand" />
+      <input id="edit-p-weight" placeholder="Weight" />
+      <input id="edit-p-dimensions" placeholder="Dimensions" />
+      <input id="edit-p-offer" type="number" placeholder="Discount %" />
+      <label style="display: flex; align-items: center; margin: 10px 0;">
+        <input type="checkbox" id="edit-p-available" style="margin-right: 8px;" />
+        <span>Available for purchase</span>
+      </label>
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button onclick="saveProductEdit()" style="flex: 1;">Save Changes</button>
+        <button onclick="closeEditProductModal()" style="flex: 1; background: #6c757d;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Deal Modal -->
+  <div id="edit-deal-modal" class="modal" style="display: none;">
+    <div class="modal-content" style="max-width: 600px;">
+      <span class="close-modal" onclick="closeEditDealModal()">&times;</span>
+      <h2>Edit Deal</h2>
+      <input id="edit-d-id" type="hidden" />
+      <input id="edit-d-title" placeholder="Deal title" />
+      <textarea id="edit-d-description" placeholder="Description" rows="3"></textarea>
+      <input id="edit-d-points" type="number" placeholder="Points cost" />
+      <select id="edit-d-type">
+        <option value="percentage">Percentage Discount (%)</option>
+        <option value="fixed">Fixed Discount ($)</option>
+        <option value="freeItem">Free Item</option>
+      </select>
+      <input id="edit-d-value" type="number" step="0.01" placeholder="Discount value" />
+      <input id="edit-d-min-order" type="number" step="0.01" placeholder="Minimum order value" />
+      <input id="edit-d-max-uses" type="number" placeholder="Max uses per customer" />
+      <label style="display: flex; align-items: center; margin: 10px 0;">
+        <input type="checkbox" id="edit-d-active" style="margin-right: 8px;" />
+        <span>Active</span>
+      </label>
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button onclick="saveDealEdit()" style="flex: 1;">Save Changes</button>
+        <button onclick="closeEditDealModal()" style="flex: 1; background: #6c757d;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+<html>
+
+

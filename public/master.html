@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Master Panel - ShopHub</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+      </div>
+      <h1 class="loading-title">ShopHub Master</h1>
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+
+  <header class="topbar master-topbar">
+    <div class="logo master-logo">
+      <div class="master-crown-icon">
+        <svg viewBox="0 0 24 24" width="36" height="36" aria-hidden="true">
+          <path fill="currentColor" d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0 6c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      </div>
+      <div class="master-title">
+        <span class="master-title-main">Master Control</span>
+        <span class="master-title-sub">Full System Access</span>
+      </div>
+    </div>
+    <nav>
+      <a href="#" id="logout-link" class="master-logout-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Logout
+      </a>
+    </nav>
+  </header>
+  
+  <div class="admin-container">
+    <!-- Products Management Tab -->
+    <div id="tab-products" class="admin-tab active">
+      <h2>📦 Product Management</h2>
+      <div class="card">
+        <h3>All Products</h3>
+        <div id="products-list" class="master-products-list"></div>
+      </div>
+    </div>
+
+    <!-- Deals Management Tab -->
+    <div id="tab-deals" class="admin-tab">
+      <h2>🎁 Deals Management</h2>
+      <div class="card">
+        <h3>All Deals</h3>
+        <div id="deals-list" class="master-deals-list"></div>
+      </div>
+    </div>
+
+    <!-- Sales Analytics Tab -->
+    <div id="tab-sales" class="admin-tab">
+      <h2>📊 Sales Analytics</h2>
+      
+      <!-- Daily Sales -->
+      <div class="card">
+        <h3>📅 Daily Sales (Last 7 Days)</h3>
+        <div id="daily-sales-chart" class="sales-chart"></div>
+        <div id="daily-sales-table" class="sales-table"></div>
+      </div>
+
+      <!-- Weekly Sales -->
+      <div class="card">
+        <h3>📈 Weekly Sales (Last 8 Weeks)</h3>
+        <div id="weekly-sales-chart" class="sales-chart"></div>
+        <div id="weekly-sales-table" class="sales-table"></div>
+      </div>
+
+      <!-- Summary Stats -->
+      <div class="card">
+        <h3>💰 Summary Statistics</h3>
+        <div id="sales-summary" class="sales-summary"></div>
+      </div>
+    </div>
+
+    <!-- Customer Purchases Tab -->
+    <div id="tab-customers" class="admin-tab">
+      <h2>👥 Customer Purchase History</h2>
+      
+      <!-- Filters -->
+      <div class="card">
+        <h3>🔍 Filters</h3>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <input id="search-customer" type="text" placeholder="Search by name or email..." style="flex: 1; min-width: 200px;" />
+          <select id="filter-date-range" style="padding: 12px;">
+            <option value="all">All Time</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+          </select>
+          <button id="apply-filters" style="padding: 12px 24px;">Apply Filters</button>
+        </div>
+      </div>
+
+      <!-- Customer List -->
+      <div class="card">
+        <h3>📋 Customer Purchase List</h3>
+        <div id="customers-list" class="master-customers-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav admin-bottom-nav">
+    <button class="nav-item active" data-tab="products">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Products</span>
+    </button>
+    <button class="nav-item" data-tab="deals">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+      </svg>
+      <span>Deals</span>
+    </button>
+    <button class="nav-item" data-tab="sales">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="20" x2="12" y2="10"></line>
+        <line x1="18" y1="20" x2="18" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="16"></line>
+      </svg>
+      <span>Sales</span>
+    </button>
+    <button class="nav-item" data-tab="customers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Customers</span>
+    </button>
+  </nav>
+
+  <!-- Edit Product Modal -->
+  <div id="edit-product-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeEditProductModal()">&times;</span>
+      <h2>Edit Product</h2>
+      <input id="edit-p-id" type="hidden" />
+      <input id="edit-p-name" placeholder="Product name" />
+      <input id="edit-p-price" type="number" step="0.01" placeholder="Price ($)" />
+      <textarea id="edit-p-desc" placeholder="Description" rows="2"></textarea>
+      <input id="edit-p-stock" type="number" placeholder="Stock quantity" />
+      <input id="edit-p-sku" placeholder="SKU" />
+      <input id="edit-p-brand" placeholder="Brand" />
+      <input id="edit-p-weight" placeholder="Weight" />
+      <input id="edit-p-dimensions" placeholder="Dimensions" />
+      <input id="edit-p-offer" type="number" placeholder="Discount %" />
+      <label style="display: flex; align-items: center;">
+        <input type="checkbox" id="edit-p-available" style="margin-right: 8px;" />
+        <span>Available for purchase</span>
+      </label>
+      <div style="display: flex; gap: 12px; margin-top: 16px;">
+        <button onclick="saveProductEdit()" style="flex: 1;">Save</button>
+        <button onclick="closeEditProductModal()" style="flex: 1; background: #6c757d;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Deal Modal -->
+  <div id="edit-deal-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeEditDealModal()">&times;</span>
+      <h2>Edit Deal</h2>
+      <input id="edit-d-id" type="hidden" />
+      <input id="edit-d-title" placeholder="Deal title" />
+      <textarea id="edit-d-description" placeholder="Description" rows="2"></textarea>
+      <input id="edit-d-points" type="number" placeholder="Points cost" />
+      <select id="edit-d-type">
+        <option value="percentage">Percentage Discount (%)</option>
+        <option value="fixed">Fixed Discount ($)</option>
+        <option value="freeItem">Free Item</option>
+      </select>
+      <input id="edit-d-value" type="number" step="0.01" placeholder="Discount value" />
+      <input id="edit-d-min-order" type="number" step="0.01" placeholder="Minimum order value" />
+      <input id="edit-d-max-uses" type="number" placeholder="Max uses per customer" />
+      <label style="display: flex; align-items: center;">
+        <input type="checkbox" id="edit-d-active" style="margin-right: 8px;" />
+        <span>Active</span>
+      </label>
+      <div style="display: flex; gap: 12px; margin-top: 16px;">
+        <button onclick="saveDealEdit()" style="flex: 1;">Save</button>
+        <button onclick="closeEditDealModal()" style="flex: 1; background: #6c757d;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/master.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+╔════════════════════════════════════════════════════════════════╗
+║           SHOPHUB HOSTINGER DEPLOYMENT CHECKLIST               ║
+╚════════════════════════════════════════════════════════════════╝
+
+PHASE 1: MONGODB ATLAS SETUP
+────────────────────────────────────────────────────────────────
+[ ] Click "Done" in MongoDB Atlas connection screen
+[ ] Go to "Network Access" in left sidebar
+[ ] Click "Add IP Address"
+[ ] Select "Allow Access from Anywhere" (0.0.0.0/0)
+[ ] Click "Confirm"
+[ ] Save your connection string:
+    mongodb+srv://sourboii2002_db_user:<PASSWORD>@cluster0.b0fymfr.mongodb.net/shophub?retryWrites=true&w=majority&appName=Cluster0
+
+PHASE 2: STRIPE SETUP
+────────────────────────────────────────────────────────────────
+[ ] Go to https://dashboard.stripe.com/apikeys
+[ ] Copy Publishable Key (pk_live_...)
+[ ] Copy Secret Key (sk_live_...)
+[ ] Save both keys securely
+
+PHASE 3: PREPARE FILES
+────────────────────────────────────────────────────────────────
+[ ] Run: node prepare-deployment.js
+[ ] Verify all files exist
+[ ] Update env.production.template with your values
+[ ] Generate JWT_SECRET at https://www.uuidgenerator.net/
+
+PHASE 4: HOSTINGER SETUP
+────────────────────────────────────────────────────────────────
+[ ] Login to https://www.hostinger.com
+[ ] Go to Hosting → Manage
+[ ] Click "Advanced" → "Node.js"
+[ ] Click "Create Application"
+[ ] Configure:
+    - Node.js version: 18.x
+    - Mode: Production
+    - Root: /public_html/shophub
+    - Startup: server.js
+    - Port: 3001
+[ ] Click "Create"
+
+PHASE 5: UPLOAD FILES
+────────────────────────────────────────────────────────────────
+[ ] Go to hPanel → "FTP Accounts"
+[ ] Create/note FTP credentials
+[ ] Download FileZilla
+[ ] Connect to FTP
+[ ] Upload these files to /public_html/shophub/:
+    [ ] server.js
+    [ ] package.json
+    [ ] .htaccess
+    [ ] ecosystem.config.js
+    [ ] /src/ folder (all files)
+    [ ] /public/ folder (all files)
+
+PHASE 6: ENVIRONMENT VARIABLES
+────────────────────────────────────────────────────────────────
+[ ] Go to hPanel → Node.js → Your App
+[ ] Scroll to "Environment Variables"
+[ ] Add these variables:
+
+    [ ] MONGO_URI = [Your MongoDB connection string]
+    [ ] JWT_SECRET = [Random 32+ character string]
+    [ ] STRIPE_SECRET_KEY = [Your sk_live_... key]
+    [ ] STRIPE_PUBLISHABLE_KEY = [Your pk_live_... key]
+    [ ] PORT = 3001
+    [ ] NODE_ENV = production
+
+PHASE 7: SSH & INSTALL
+────────────────────────────────────────────────────────────────
+[ ] Go to hPanel → Advanced → SSH Access
+[ ] Enable SSH
+[ ] Note SSH credentials
+[ ] Open terminal and connect:
+    ssh username@your-domain.com -p 65002
+[ ] Navigate to app:
+    cd public_html/shophub
+[ ] Install dependencies:
+    npm install --production
+[ ] Create uploads directory:
+    mkdir -p public/uploads
+    chmod 755 public/uploads
+[ ] Exit SSH:
+    exit
+
+PHASE 8: START APPLICATION
+────────────────────────────────────────────────────────────────
+[ ] Go to hPanel → Node.js
+[ ] Click your application
+[ ] Click "Start Application"
+[ ] Wait for status: "Running" ✓
+
+PHASE 9: SSL CERTIFICATE
+────────────────────────────────────────────────────────────────
+[ ] Go to hPanel → Security → SSL
+[ ] Find your domain
+[ ] Click "Install SSL"
+[ ] Wait 5-10 minutes for activation
+[ ] Verify https:// works
+
+PHASE 10: UPDATE FRONTEND
+────────────────────────────────────────────────────────────────
+[ ] Edit public/js/customer.js
+[ ] Find line ~8: const stripe = Stripe('...');
+[ ] Replace with: const stripe = Stripe('pk_live_YOUR_KEY');
+[ ] Re-upload the file via FTP
+
+PHASE 11: TESTING
+────────────────────────────────────────────────────────────────
+[ ] Visit https://yourdomain.com
+[ ] Test homepage loads
+[ ] Test signup: Create new account
+[ ] Test login: Login with new account
+[ ] Test products: View product catalog
+[ ] Test cart: Add items to cart
+[ ] Test checkout: Complete purchase (4242 4242 4242 4242)
+[ ] Test admin: Login as admin@shophub.com / Admin@2024
+[ ] Test master: Login as master@shophub.com / Master@2024
+[ ] Test image upload: Upload product image
+[ ] Test product creation: Create new product
+[ ] Test product editing: Edit existing product
+[ ] Test deals: Create/edit deals
+[ ] Test sales: View sales analytics
+[ ] Test mobile: Check on phone/tablet
+
+PHASE 12: SECURITY
+────────────────────────────────────────────────────────────────
+[ ] Change admin password in src/routes/auth.js
+[ ] Change master password in src/routes/auth.js
+[ ] Verify SSL certificate is active (🔒 in browser)
+[ ] Test HTTPS redirect works
+[ ] Review MongoDB Atlas security settings
+[ ] Enable Stripe webhooks (optional)
+
+PHASE 13: MONITORING
+────────────────────────────────────────────────────────────────
+[ ] Check application logs in hPanel
+[ ] Monitor resource usage
+[ ] Set up uptime monitoring (optional)
+[ ] Configure backup strategy
+[ ] Document any custom changes
+
+TROUBLESHOOTING REFERENCE
+────────────────────────────────────────────────────────────────
+App won't start:
+  → SSH: cd public_html/shophub && node server.js
+  → Check logs in hPanel → Node.js → Application Logs
+
+Database connection fails:
+  → Verify MongoDB Atlas Network Access: 0.0.0.0/0
+  → Check password in MONGO_URI (no < > brackets)
+  → Verify database user permissions
+
+Images won't upload:
+  → SSH: mkdir -p public/uploads && chmod 755 public/uploads
+
+502 Bad Gateway:
+  → Check Node.js app is running
+  → Verify PORT is 3001 everywhere
+  → Check .htaccess file exists
+
+Stripe payments fail:
+  → Use LIVE keys (pk_live_... and sk_live_...)
+  → Check Stripe dashboard for errors
+  → Verify domain in Stripe settings
+
+IMPORTANT LINKS
+────────────────────────────────────────────────────────────────
+MongoDB Atlas:     https://cloud.mongodb.com
+Stripe Dashboard:  https://dashboard.stripe.com
+Hostinger hPanel:  https://hpanel.hostinger.com
+UUID Generator:    https://www.uuidgenerator.net/
+FileZilla:         https://filezilla-project.org/
+
+YOUR CREDENTIALS
+────────────────────────────────────────────────────────────────
+MongoDB:
+  Cluster: cluster0.b0fymfr.mongodb.net
+  User: sourboii2002_db_user
+  Database: shophub
+
+Admin Panel:
+  Email: admin@shophub.com
+  Password: Admin@2024
+
+Master Panel:
+  Email: master@shophub.com
+  Password: Master@2024
+
+ESTIMATED TIME: 45 minutes
+STATUS: Ready to deploy! 🚀
+
+╔════════════════════════════════════════════════════════════════╗
+║  Print this checklist and check off items as you complete them ║
+╚════════════════════════════════════════════════════════════════╝
+
