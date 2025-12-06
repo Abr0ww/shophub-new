@@ -7,6 +7,5 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 3001
+      # Note: PORT is automatically provided by Render.com - do not set it manually
 

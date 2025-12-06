@@ -8,6 +8,17 @@ import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+// Validate required environment variables in production
+if (process.env.NODE_ENV === 'production') {
+  const required = ['MONGO_URI', 'JWT_SECRET'];
+  const missing = required.filter(key => !process.env[key]);
+  if (missing.length > 0) {
+    console.error('❌ Missing required environment variables:', missing.join(', '));
+    console.error('💡 Please set these in Render.com Environment Variables');
+    process.exit(1);
+  }
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -27,8 +38,15 @@ import Product from './src/models/Product.js';
 import Deal from './src/models/Deal.js';
 import Category from './src/models/Category.js';
 import Feedback from './src/models/Feedback.js';
-mongoose.connect(MONGO_URI).then(async () => {
-  console.log('Connected to MongoDB');
+
+// MongoDB connection options
+const mongooseOptions = {
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+  socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+};
+
+mongoose.connect(MONGO_URI, mongooseOptions).then(async () => {
+  console.log('✅ Connected to MongoDB');
   // Seed dummy data on first run
   try {
     // Seed categories first
@@ -604,8 +622,18 @@ mongoose.connect(MONGO_URI).then(async () => {
   } catch (e) {
     console.error('Seeding error:', e);
   }
+  
+  // Start server only after MongoDB connection is successful
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
 }).catch((err) => {
-  console.error('MongoDB connection error:', err);
+  console.error('❌ MongoDB connection error:', err.message);
+  console.error('💡 Check your MONGO_URI environment variable');
+  console.error('💡 For Render.com: Ensure MONGO_URI is set in Environment Variables');
+  process.exit(1); // Exit with error code so Render knows deployment failed
 });
 
 // Routes
@@ -647,9 +675,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Server will start after MongoDB connection (see mongoose.connect above)
 
 
