@@ -3,7 +3,7 @@
 ## Your MongoDB Credentials
 
 - **Username:** EliteHeights
-- **Password:** Elite@2025!!
+- **Password:** EliteHeights
 - **Cluster:** cluster0.btlp6ts.mongodb.net
 - **Database Name:** food_app (or shophub - your choice)
 
@@ -12,13 +12,10 @@
 **For Render.com Environment Variable:**
 
 ```
-MONGO_URI=mongodb+srv://EliteHeights:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
+mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
 ```
 
-**Note:** The password is URL-encoded:
-- `@` becomes `%40`
-- `!` becomes `%21`
-- So `Elite@2025!!` becomes `Elite%402025%21%21`
+**Note:** The password `EliteHeights` has no special characters, so no URL encoding is needed!
 
 ## 📋 Step-by-Step Setup
 
@@ -41,7 +38,7 @@ MONGO_URI=mongodb+srv://EliteHeights:Elite%402025%21%21@cluster0.btlp6ts.mongodb
 3. Set:
    - **Authentication Method:** Password
    - **Username:** EliteHeights
-   - **Password:** Elite@2025!!
+   - **Password:** EliteHeights
    - **Database User Privileges:** Read and write to any database (or specific database)
 4. Click **"Add User"**
 
@@ -53,7 +50,7 @@ MONGO_URI=mongodb+srv://EliteHeights:Elite%402025%21%21@cluster0.btlp6ts.mongodb
 4. Find or add `MONGO_URI`
 5. Set the value to:
    ```
-   mongodb+srv://EliteHeights:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
+   mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
    ```
 6. Click **"Save Changes"**
 7. Render will automatically restart your service
@@ -77,7 +74,7 @@ Before deploying, test the connection string locally:
 
 1. Update your local `.env` file:
    ```
-   MONGO_URI=mongodb+srv://EliteHeights:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
+   MONGO_URI=mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
    ```
 
 2. Run your server:
@@ -113,13 +110,13 @@ mongodb+srv://USERNAME:URL_ENCODED_PASSWORD@CLUSTER.mongodb.net/DATABASE_NAME?re
 
 **Your Values:**
 - Username: `EliteHeights`
-- Password (URL-encoded): `Elite%402025%21%21`
+- Password: `EliteHeights` (no special characters, no encoding needed)
 - Cluster: `cluster0.btlp6ts.mongodb.net`
 - Database: `food_app` (or `shophub`)
 
 **Render.com Environment Variable:**
 - Key: `MONGO_URI`
-- Value: `mongodb+srv://EliteHeights:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0`
+- Value: `mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0`
 
 ---
 
