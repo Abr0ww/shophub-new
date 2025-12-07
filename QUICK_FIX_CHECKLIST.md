@@ -70,7 +70,7 @@ production
 3. **Verify Each Variable:**
    - ✅ Does `MONGO_URI` exist? (Case-sensitive!)
    - ✅ Is the value exactly as shown above?
-   - ✅ Password is `EliteHeights` (no special characters, no encoding needed)
+   - ✅ Password is URL-encoded: `Elite@2025!!` = `Elite%402025%21%21`
    - ✅ Does `JWT_SECRET` exist and match?
    - ✅ Does `NODE_ENV` exist and equal `production`?
 
@@ -89,10 +89,10 @@ production
    - Left sidebar → **"Database Access"**
 
 2. **Check User Exists:**
-   - Look for user: **`EliteHeights`**
+   - Look for user: **`EliteHeightsDB`**
    - If it doesn't exist → Create it:
      - Click **"Add New Database User"**
-     - Username: `EliteHeights`
+     - Username: `EliteHeightsDB`
      - Password: `Elite@2025!!`
      - Privileges: **"Read and write to any database"**
      - Click **"Add User"**
@@ -109,7 +109,7 @@ production
 
 1. **Update local `.env` file:**
    ```env
-   MONGO_URI=mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
+   MONGO_URI=mongodb+srv://EliteHeightsDB:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
    JWT_SECRET=39d3bd59-33fb-488b-be88-b88241c6255d
    NODE_ENV=production
    PORT=3000
@@ -157,19 +157,19 @@ After fixing MongoDB Atlas IP whitelist:
 
 ### Mistake 2: Wrong Connection String Format
 - ❌ Wrong password or username
-- ✅ **Fix:** Username and password are both `EliteHeights` (no special characters)
+- ✅ **Fix:** Username is `EliteHeightsDB`, password is `Elite@2025!!` (URL-encoded as `Elite%402025%21%21`)
 
 ### Mistake 3: Typo in Environment Variable Name
 - ❌ `MONGO_URI` vs `MONGO_URI` (case-sensitive!)
 - ✅ **Fix:** Exact match: `MONGO_URI` (all caps)
 
 ### Mistake 4: Database User Doesn't Exist
-- ❌ User `EliteHeights` not created in MongoDB Atlas
+- ❌ User `EliteHeightsDB` not created in MongoDB Atlas
 - ✅ **Fix:** Create user in Database Access section
 
 ### Mistake 5: Wrong Password
 - ❌ Password mismatch between MongoDB Atlas and connection string
-- ✅ **Fix:** Verify password is exactly `EliteHeights` in both places
+- ✅ **Fix:** Verify password is exactly `Elite@2025!!` in both places (URL-encoded in connection string)
 
 ---
 
@@ -178,7 +178,7 @@ After fixing MongoDB Atlas IP whitelist:
 Before checking Render logs again, verify:
 
 - [ ] MongoDB Atlas → Network Access → `0.0.0.0/0/0` exists and status is **"Active"** (green)
-- [ ] MongoDB Atlas → Database Access → User `EliteHeights` exists
+- [ ] MongoDB Atlas → Database Access → User `EliteHeightsDB` exists
 - [ ] Render.com → Environment → `MONGO_URI` is set correctly (with URL-encoded password)
 - [ ] Render.com → Environment → `JWT_SECRET` is set to `39d3bd59-33fb-488b-be88-b88241c6255d`
 - [ ] Render.com → Environment → `NODE_ENV` is set to `production`
@@ -209,7 +209,7 @@ If you've completed all steps and still see the error:
 
 1. **Double-check MongoDB Atlas:**
    - Network Access → Is `0.0.0.0/0/0` status "Active"?
-   - Database Access → Does user `EliteHeights` exist?
+   - Database Access → Does user `EliteHeightsDB` exist?
    - Try clicking "Test Connection" in MongoDB Atlas
 
 2. **Double-check Render:**

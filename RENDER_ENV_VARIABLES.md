@@ -6,14 +6,15 @@ Copy and paste these values directly into Render.com Environment Variables.
 
 ### MONGO_URI
 ```
-mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
+mongodb+srv://EliteHeightsDB:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
 ```
 
 **Note:** 
-- Username: `EliteHeights`
-- Password: `EliteHeights` (no special characters, no encoding needed)
+- Username: `EliteHeightsDB`
+- Password: `Elite@2025!!` (URL-encoded as `Elite%402025%21%21`)
 - Database: `food_app`
 - Cluster: `cluster0.btlp6ts.mongodb.net`
+- Password encoding: `@` = `%40`, `!` = `%21`
 
 ### JWT_SECRET
 ```
@@ -80,7 +81,7 @@ pk_test_YOUR_STRIPE_PUBLISHABLE_KEY
 
 - ❌ **DO NOT** set `PORT` - Render provides this automatically
 - ✅ Make sure MongoDB Atlas IP whitelist allows `0.0.0.0/0`
-- ✅ Password in MONGO_URI: `EliteHeights` (no special characters, no encoding needed)
+- ✅ Password in MONGO_URI is URL-encoded (`@` = `%40`, `!` = `%21`)
 - ✅ All variable names are case-sensitive
 
 ---
@@ -90,7 +91,7 @@ pk_test_YOUR_STRIPE_PUBLISHABLE_KEY
 To test these values locally, create a `.env` file:
 
 ```env
-MONGO_URI=mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
+MONGO_URI=mongodb+srv://EliteHeightsDB:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
 JWT_SECRET=39d3bd59-33fb-488b-be88-b88241c6255d
 NODE_ENV=production
 PORT=3000

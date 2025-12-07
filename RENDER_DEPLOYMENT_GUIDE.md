@@ -6,7 +6,7 @@ Complete step-by-step guide to deploy your ShopHub application on Render.com.
 
 - ✅ GitHub repository: https://github.com/Abr0ww/shophub-new.git
 - ✅ MongoDB Atlas account with cluster set up
-- ✅ MongoDB credentials ready (EliteHeights / Elite@2025!!)
+- ✅ MongoDB credentials ready (EliteHeightsDB / Elite@2025!!)
 - ✅ Stripe account (optional, for payments)
 
 ---
@@ -28,7 +28,7 @@ Complete step-by-step guide to deploy your ShopHub application on Render.com.
 ### 1.2 Verify Database User
 
 1. Go to **"Database Access"** (left sidebar)
-2. Verify user `EliteHeights` exists
+2. Verify user `EliteHeightsDB` exists
 3. If not, create it with password `Elite@2025!!`
 4. Grant **"Read and write to any database"** permissions
 
@@ -90,7 +90,7 @@ Click **"Create Web Service"**
 **MONGO_URI**
 ```
 Key: MONGO_URI
-Value: mongodb+srv://EliteHeights:EliteHeights@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
+Value: mongodb+srv://EliteHeightsDB:Elite%402025%21%21@cluster0.btlp6ts.mongodb.net/food_app?retryWrites=true&w=majority&appName=Cluster0
 ```
 
 **JWT_SECRET**
@@ -199,7 +199,7 @@ Value: 0.5
 **Solutions:**
 - ✅ Check MongoDB Atlas Network Access allows `0.0.0.0/0`
 - ✅ Verify `MONGO_URI` is correct in Render environment variables
-- ✅ Check password is `EliteHeights` (no special characters, no encoding needed)
+- ✅ Check password is URL-encoded: `Elite@2025!!` = `Elite%402025%21%21`
 - ✅ Verify database user exists and has correct permissions
 
 ### Issue: "Missing required environment variables"
